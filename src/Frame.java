@@ -77,7 +77,6 @@ public class Frame extends JPanel implements MouseListener, MouseMotionListener,
 				g.drawRect(i*SIZE, j*SIZE, SIZE, SIZE);
 			}
 		}
-		
 	}
 
 	@Override
@@ -85,6 +84,11 @@ public class Frame extends JPanel implements MouseListener, MouseMotionListener,
 		int x = e.getX()/SIZE;
 		int y = e.getY()/SIZE;
 		Node newNode = new Node(x, y);
+		
+		// If mouse goes out of bounds
+		if (x < 0 || x > this.getWidth()/SIZE || y < 0 || y > this.getHeight()/SIZE) {
+			return;
+		}
 		
 		// Create start node
 		if (startPressed == true && endPressed != true) {
@@ -134,7 +138,13 @@ public class Frame extends JPanel implements MouseListener, MouseMotionListener,
 		// TODO Auto-generated method stub
 		int x = e.getX()/SIZE;
 		int y = e.getY()/SIZE;
+		System.out.println(x + ", " + y);
 		Node newNode = new Node(x, y);
+		
+		// Ignore if mouse goes out of bounds
+		if (x < 0 || x > this.getWidth()/SIZE || y < 0 || y > this.getHeight()/SIZE) {
+			return;
+		}
 		
 		if (startPressed == true && endPressed != true) {
 			astar.setStart(newNode);											
