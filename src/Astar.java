@@ -1,11 +1,15 @@
 import java.util.ArrayList;
 
+
+/**
+ * @author zainasir
+ * This is the A* algorithm implementation.
+ */
 public class Astar {
 	private ArrayList<Node> open, closed, blocked;
 	private Node start, end;
-	private int rows, cols;
 	
-	public Astar(int rows, int cols) {
+	public Astar() {
 		open = new ArrayList<Node>();
 		closed = new ArrayList<Node>();
 		blocked = new ArrayList<Node>();
@@ -50,25 +54,20 @@ public class Astar {
 	public ArrayList<Node> getClosed() {
 		return closed;
 	}
-	public int getRows() {
-		return rows;
-	}
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
-	public int getCols() {
-		return cols;
-	}
-	public void setCols(int cols) {
-		this.cols = cols;
-	}
 
 	public Node getStart() {
 		return start;
 	}
 
 	public void setStart(Node start) {
-		// Set start node only if different from end node
+		// Ignore if start node same as blocked node
+		for (Node node : blocked) {
+			if (node.getX() == start.getX() && node.getY() == start.getY()) {
+				return;
+			}
+		}
+		
+		// Set if different from end node
 		if (this.end.getX() != start.getX() || this.end.getY() != start.getY()) {
 			this.start = start;			
 		}
@@ -79,7 +78,14 @@ public class Astar {
 	}
 
 	public void setEnd(Node end) {
-		// Set end node only if different from start node
+		// Ignore if end node same as blocked node
+		for (Node node : blocked) {
+			if (node.getX() == end.getX() && node.getY() == end.getY()) {
+				return;
+			}
+		}
+		
+		// Set end node only different from start node
 		if (this.start.getX() != end.getX() || this.start.getY() != end.getY()) {
 			this.end = end;			
 		}

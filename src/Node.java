@@ -1,4 +1,8 @@
 
+/**
+ * @author zainasir
+ * This is the Node class for nodes used in all pathfinding algorithms.
+ */
 public class Node {
 	private int x, y;
 

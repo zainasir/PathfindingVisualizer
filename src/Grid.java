@@ -1,52 +1,40 @@
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class Frame extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
-	private JFrame frame;
+
+
+/**
+ * @author zainasir
+ * This is the center panel class. Controls the background grid layout and,
+ * all graphics related to nodes.
+ */
+public class Grid extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 	private Astar astar;
 	private final int SIZE = 30;
 	private boolean startPressed, endPressed;
 	
-	public Frame(int rows, int cols) {
-		startPressed = false;
-		endPressed = false;
+	public Grid() {
+		// Initialize astar algroithm
+		astar = new Astar();
 		
-		// Initialize frame
-		frame = new JFrame("Pathfinding Visualizer");
-		frame.setContentPane(this);
-		frame.setLayout(new GridLayout(rows, cols));
-		
-		// Initialize Astar algorithm
-		astar = new Astar(rows, cols);
-
-		// Set up the frame
+		// Initialize the JPanel
 		setFocusable(true);
 		requestFocus();
 		requestFocusInWindow();
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		addKeyListener(this);
-		frame.setSize(1000, 1000);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
 	}
 	
+	// Repaint settings to draw/erase nodes
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
@@ -72,13 +60,13 @@ public class Frame extends JPanel implements MouseListener, MouseMotionListener,
 			
 		// Add borders
 		g.setColor(Color.gray);
-		for (int i = 0; i < this.getWidth()/SIZE + 1; i++) {
-			for (int j = 0; j < this.getHeight()/SIZE + 1; j++) {
+		for (int i = 0; i < this.getWidth()/SIZE; i++) {
+			for (int j = 0; j < this.getHeight()/SIZE; j++) {
 				g.drawRect(i*SIZE, j*SIZE, SIZE, SIZE);
 			}
 		}
 	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		int x = e.getX()/SIZE;
@@ -86,7 +74,7 @@ public class Frame extends JPanel implements MouseListener, MouseMotionListener,
 		Node newNode = new Node(x, y);
 		
 		// If mouse goes out of bounds
-		if (x < 0 || x > this.getWidth()/SIZE || y < 0 || y > this.getHeight()/SIZE) {
+		if (x < 0 || x >= this.getWidth()/SIZE || y < 0 || y >= this.getHeight()/SIZE) {
 			return;
 		}
 		
@@ -127,6 +115,8 @@ public class Frame extends JPanel implements MouseListener, MouseMotionListener,
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		requestFocus();
+		requestFocusInWindow();
 	}
 
 	@Override
@@ -138,11 +128,10 @@ public class Frame extends JPanel implements MouseListener, MouseMotionListener,
 		// TODO Auto-generated method stub
 		int x = e.getX()/SIZE;
 		int y = e.getY()/SIZE;
-		System.out.println(x + ", " + y);
 		Node newNode = new Node(x, y);
 		
 		// Ignore if mouse goes out of bounds
-		if (x < 0 || x > this.getWidth()/SIZE || y < 0 || y > this.getHeight()/SIZE) {
+		if (x < 0 || x >= this.getWidth()/SIZE || y < 0 || y >= this.getHeight()/SIZE) {
 			return;
 		}
 		
