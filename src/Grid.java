@@ -48,7 +48,7 @@ public class Grid extends JPanel implements MouseListener, MouseMotionListener, 
 		
 		
 		// Draw open nodes
-		g.setColor(Color.green);
+		g.setColor(new Color(255, 220, 168));
 		if (astar.getOpen() != null && astar.getOpen().size() > 0) {
 			for (Node node : astar.getOpen()) {
 				g.fillRect(node.getX()*SIZE, node.getY()*SIZE, SIZE, SIZE);
@@ -56,7 +56,7 @@ public class Grid extends JPanel implements MouseListener, MouseMotionListener, 
 		}
 		
 		// Draw closed nodes
-		g.setColor(Color.red);
+		g.setColor(new Color(255, 180, 69));
 		if (astar.getClosed() != null && astar.getClosed().size() > 0) {
 			for (Node node : astar.getClosed()) {
 				if (node.getX() != astar.getStart().getX() || node.getY() != astar.getStart().getY()) {
@@ -66,7 +66,7 @@ public class Grid extends JPanel implements MouseListener, MouseMotionListener, 
 		}
 		
 		// Draw path
-		g.setColor(Color.orange);
+		g.setColor(new Color(0, 204, 255));
 		if (astar.getPath() != null && astar.getPath().size() > 0) {
 			for (Node node : astar.getPath()) {
 				g.fillRect(node.getX()*SIZE, node.getY()*SIZE, SIZE, SIZE);
@@ -81,24 +81,24 @@ public class Grid extends JPanel implements MouseListener, MouseMotionListener, 
 			}
 		}	
 		
+		// Draw start node
+		g.setColor(new Color(0, 255, 72));
+		if (astar.getStart() != null) {
+			g.fillRect(astar.getStart().getX() * SIZE, astar.getStart().getY() * SIZE, SIZE, SIZE);			
+		}
+		
+		// Draw end node
+		g.setColor(new Color(255, 0, 0));
+		if (astar.getEnd() != null) {
+			g.fillRect(astar.getEnd().getX() * SIZE, astar.getEnd().getY() * SIZE, SIZE, SIZE);
+		}
+		
 		// Add borders
 		g.setColor(Color.gray);
 		for (int i = 0; i < this.getWidth()/SIZE; i++) {
 			for (int j = 0; j < this.getHeight()/SIZE; j++) {
 				g.drawRect(i*SIZE, j*SIZE, SIZE, SIZE);
 			}
-		}
-		
-		// Draw start node
-		g.setColor(Color.blue);
-		if (astar.getStart() != null) {
-			g.fillRect(astar.getStart().getX() * SIZE, astar.getStart().getY() * SIZE, SIZE, SIZE);			
-		}
-		
-		// Draw end node
-		g.setColor(Color.cyan);
-		if (astar.getEnd() != null) {
-			g.fillRect(astar.getEnd().getX() * SIZE, astar.getEnd().getY() * SIZE, SIZE, SIZE);
 		}
 	}
 	

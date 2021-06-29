@@ -107,13 +107,7 @@ public class Astar {
 		neighbors.clear();	
 		
 		Node currNode = findLeastF();
-		if (currNode.getX() == end.getX() && currNode.getY() == end.getY()) {
-			System.out.println("End node reached!");
-			initialized = false;
-			running = false;
-			completed = true;
-			return currNode;
-		}
+
 		// Add neighbors to neighbors list
 		neighbors.add(new Node(currNode.getX() - 1, currNode.getY() + 1));
 		neighbors.add(new Node(currNode.getX(), currNode.getY() + 1));
@@ -125,6 +119,17 @@ public class Astar {
 		neighbors.add(new Node(currNode.getX() + 1, currNode.getY() - 1));
 		
 		for (Node neighbor : neighbors) {
+			// Return neighbor if neighbor is end node
+			if (neighbor.getX() == end.getX() && neighbor.getY() == end.getY()) {
+				System.out.println("End node reached!");
+				initialized = false;
+				running = false;
+				completed = true;
+				open.remove(currNode);
+				closed.add(currNode);
+				neighbor.setParent(currNode);
+				return neighbor;
+			}
 			// Calculate total weight
 			int totalWeight;
 			if (currNode.getX() == neighbor.getX() || currNode.getY() == neighbor.getY()) {
