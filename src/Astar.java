@@ -107,6 +107,12 @@ public class Astar {
 		neighbors.clear();	
 		
 		Node currNode = findLeastF();
+		if (currNode == null) {
+			initialized = false;
+			running = false;
+			completed = true;
+			return null;
+		}
 
 		// Add neighbors to neighbors list
 		neighbors.add(new Node(currNode.getX() - 1, currNode.getY() + 1));

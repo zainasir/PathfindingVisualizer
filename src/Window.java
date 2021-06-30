@@ -10,14 +10,12 @@ import javax.swing.JPanel;
  * Combines all panels into a single BorderLayout.
  */
 public class Window extends JFrame {
-	private JPanel grid, menu, north, east, west;
+	private JPanel menu;
+	private Grid grid;
 	
 	public Window() {
 		this.grid = new Grid();
-		this.menu = new Menu();
-		this.north = new Menu();
-		this.east = new Menu();
-		this.west = new Menu();
+		this.menu = new Menu(grid);
 		
 		this.setLayout(new BorderLayout());
 		this.add(menu, BorderLayout.SOUTH);

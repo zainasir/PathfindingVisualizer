@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -22,14 +23,18 @@ import javax.swing.Timer;
 public class Grid extends JPanel implements MouseListener, MouseMotionListener, KeyListener, ActionListener {
 	private Astar astar;
 	private Timer timer;
+	private int refreshRate;
 	private Node parent;
 	private final int SIZE = 30;
 	private boolean startPressed, endPressed;
 	
 	public Grid() {
+		// Default value for refreshRate
+		refreshRate = 50;
+		
 		// Initialize astar algroithm and timer for animation
 		astar = new Astar(this);
-		timer = new Timer(100, this);
+		timer = new Timer(refreshRate, this);
 		timer.setInitialDelay(0);
 		
 		
@@ -102,6 +107,27 @@ public class Grid extends JPanel implements MouseListener, MouseMotionListener, 
 		}
 	}
 	
+	// Function to clear all nodes from grid
+	public void clearGrid() {
+		astar.getBlocked().clear();
+		astar.getPath().clear();
+		astar.getOpen().clear();
+		astar.getClosed().clear();
+		this.repaint();
+	}
+	
+	// Run algorithm
+	public void runAlgorithm() {
+		astar.setCompleted(false);
+		timer.start();
+	}
+	
+	// Update refresh rate from speed slider value, based on a linear function where pause between each step increases linearly from 0.050s to 0.950s.
+	public void updateRefreshRate(int speed) {
+		refreshRate = 905 - (((speed/10) - 1) * 95);
+		timer.setDelay(refreshRate);
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		int x = e.getX()/SIZE;
@@ -202,25 +228,21 @@ public class Grid extends JPanel implements MouseListener, MouseMotionListener, 
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// If 's' is pressed
+		// Reposition start node if 's' is pressed
 		if (e.getKeyCode() == 83 && astar.isRunning() == false && astar.isRunning() == false) {
 			startPressed = true;
 		}
-		// If 'e' is pressed
+		// Reposition end node 'e' is pressed
 		if (e.getKeyCode() == 69 && astar.isRunning() == false) {
 			endPressed = true;
 		}
-		// If 'c' is pressed
+		// Clear grid if 'c' is pressed
 		if (e.getKeyCode() == 67 && astar.isRunning() == false) {
-			astar.getBlocked().clear();
-			astar.getPath().clear();
-			astar.getOpen().clear();
-			astar.getClosed().clear();
-			this.repaint();
+			clearGrid();
 		}
+		// Run algorithm if 'r' is pressed
 		if (e.getKeyCode() == 82 && astar.isRunning() == false) {
-			astar.setCompleted(false);
-			timer.start();
+			runAlgorithm();
 		}		
 	}
 
@@ -238,6 +260,8 @@ public class Grid extends JPanel implements MouseListener, MouseMotionListener, 
 	public void actionPerformed(ActionEvent e) {
 		if (astar.isCompleted()) {
 			if (parent == null) {
+				JOptionPane.showMessageDialog(this, "No path found!");
+				timer.stop();
 				return;
 			}
 			while (parent.getParent() != null) {
@@ -254,5 +278,13 @@ public class Grid extends JPanel implements MouseListener, MouseMotionListener, 
 			parent = astar.moveStep();
 			this.repaint();
 		}
+	}
+	
+	public Astar getAstar() {
+		return astar;
+	}
+	
+	public void setAstar(Astar astar) {
+		this.astar = astar;
 	}
 }
